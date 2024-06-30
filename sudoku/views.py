@@ -16,8 +16,8 @@ def index(request):
 
 def process(request):
     print("processing-start==========>")
-    sudoku2Path = "images/sudoku3.png"
-    image = extract_sudoku(sudoku2Path)
+    sudoku2Path = "images/sudoku4.jpg"
+    image = extract_sudoku(sudoku2Path, debug=True)
     grid = extract_number(image)
     print("Sudoku:")
     display_sudoku(grid.tolist())
