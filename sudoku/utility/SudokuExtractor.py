@@ -3,29 +3,19 @@ import cv2
 import operator
 import numpy as np
 
+from .CommonFunctions import show_image
+
 # from matplotlib import pyplot as plt
 
 
-def plot_many_images(images, titles, rows=1, columns=2):
-    """Plots each image in a given list as a grid structure. using Matplotlib."""
-    for i, image in enumerate(images):
-        plt.subplot(rows, columns, i + 1)
-        plt.imshow(image, "gray")
-        plt.title(titles[i])
-        plt.xticks([]), plt.yticks([])  # Hide tick marks
-    plt.show()
-
-
-def show_image(img, name="img"):
-    """Shows an image until any key is pressed"""
-    print(type(img))
-    print(img.shape)
-    cv2.namedWindow(name, cv2.WINDOW_AUTOSIZE)
-    processed_img = cv2.resize(img, (500, 500))  # Resize image
-    cv2.imshow(name, img)
-    cv2.waitKey(0)  # Wait for any key to be pressed (with the image window active)
-    cv2.destroyAllWindows()  # Close all windows
-    return img
+# def plot_many_images(images, titles, rows=1, columns=2):
+#     """Plots each image in a given list as a grid structure. using Matplotlib."""
+#     for i, image in enumerate(images):
+#         plt.subplot(rows, columns, i + 1)
+#         plt.imshow(image, "gray")
+#         plt.title(titles[i])
+#         plt.xticks([]), plt.yticks([])  # Hide tick marks
+#     plt.show()
 
 
 def show_digits(digits, colour=255):
@@ -357,21 +347,21 @@ def get_digits(img, squares, size):
 
 def parse_grid(path):
     original = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-    # show_image(original, name="original")
+    show_image(original, name="original")
 
     processed = pre_process_image(original)
-    # show_image(processed, name="processed")  # showing image
+    show_image(processed, name="processed")  # showing image
 
     corners = find_corners_of_largest_polygon(processed)
     cropped = crop_and_warp(original, corners)
-    # show_image(cropped, name="cropped")
+    show_image(cropped, name="cropped")
 
     squares = infer_grid(cropped)
     #    print(squares)
     digits = get_digits(cropped, squares, 28)
     #    print(digits)
     final_image = show_digits(digits)
-    # show_image(final_image, name="final")
+    show_image(final_image, name="final")
     return final_image
 
 

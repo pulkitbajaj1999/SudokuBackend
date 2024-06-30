@@ -26,8 +26,6 @@ def display_sudoku(sudoku):
 
 def show_image(img, name="img"):
     """Shows an image until any key is pressed"""
-    print(type(img))
-    print(img.shape)
     cv2.namedWindow(name, cv2.WINDOW_AUTOSIZE)
     processed_img = cv2.resize(img, (500, 500))  # Resize image
     cv2.imshow(name, img)

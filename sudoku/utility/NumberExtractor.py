@@ -7,26 +7,26 @@ from keras.models import model_from_json
 from .CommonFunctions import show_image
 
 # Load the saved model
-json_file = open("sudoku/utility/models/model.json", "r")
+json_file = open("model.json", "r")
 loaded_model_json = json_file.read()
 json_file.close()
 loaded_model = model_from_json(loaded_model_json)
 # load weights into new model
-loaded_model.load_weights("sudoku/utility/models/model.h5")
+loaded_model.load_weights("model.h5")
 print("Loaded saved model from disk.")
-print("loaded_module========+>", loaded_model)
 
 
 # evaluate loaded model on test data
 def identify_number(image):
     image_resize = cv2.resize(image, (28, 28))  # For plt.imshow
     image_resize_2 = image_resize.reshape(
-        1, 1, 28, 28
+        1, 28, 28, 1
     )  # For input to model.predict_classes
     #    cv2.imshow('number', image_test_1)
-    loaded_model_pred = loaded_model.predict_classes(image_resize_2, verbose=0)
-    #    print('Prediction of loaded_model: {}'.format(loaded_model_pred[0]))
-    return loaded_model_pred[0]
+    predictions = loaded_model.predict(image_resize_2)
+    predicted_classes = np.argmax(predictions, axis=1)
+    # loaded_model_pred = loaded_model.predict_classes(image_resize_2, verbose=0)
+    return predicted_classes[0]
 
 
 def extract_number(sudoku):
@@ -41,11 +41,14 @@ def extract_number(sudoku):
             image = sudoku[i * 50 : (i + 1) * 50, j * 50 : (j + 1) * 50]
             #            filename = "images/sudoku/file_%d_%d.jpg"%(i, j)
             #            cv2.imwrite(filename, image)
-            if image.sum() > 25000:
-                show_image(image, "identify-number")
+            if image.sum() > 100000:
                 grid[i][j] = identify_number(image)
-                print("grid [{}][{}]: {}".format(i, j, grid[i][j]))
-
             else:
                 grid[i][j] = 0
+
+            print("[extract_number]:sum[{}][{}]======+> {}".format(i, j, image.sum()))
+            if i == 0:
+                show_image(image, "number")
+            print("[extract_number]:grid [{}][{}]: {}".format(i, j, grid[i][j]))
+
     return grid.astype(int)
