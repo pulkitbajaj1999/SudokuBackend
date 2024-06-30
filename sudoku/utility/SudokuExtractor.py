@@ -345,28 +345,31 @@ def get_digits(img, squares, size):
     return digits
 
 
-def parse_grid(path):
+def parse_grid(path, debug=False):
     original = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-    show_image(original, name="original")
+    if debug:
+        show_image(original, name="original")
 
     processed = pre_process_image(original)
-    show_image(processed, name="processed")  # showing image
+    if debug:
+        show_image(processed, name="processed")  # showing image
 
     corners = find_corners_of_largest_polygon(processed)
     cropped = crop_and_warp(original, corners)
-    show_image(cropped, name="cropped")
+    if debug:
+        show_image(cropped, name="cropped")
 
     squares = infer_grid(cropped)
     #    print(squares)
     digits = get_digits(cropped, squares, 28)
     #    print(digits)
     final_image = show_digits(digits)
-    show_image(final_image, name="final")
+    # show_image(final_image, name="final")
     return final_image
 
 
-def extract_sudoku(image_path):
-    final_image = parse_grid(image_path)
+def extract_sudoku(image_path, debug=False):
+    final_image = parse_grid(image_path, debug)
     return final_image
 
 
