@@ -1,5 +1,4 @@
 import cv2
-import matplotlib.pyplot as plt
 import sys
 
 
@@ -25,7 +24,13 @@ def display_sudoku(sudoku):
             output("--------+----------+---------\n")
 
 
-def show_image(image):
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    plt.imshow(image)
-    plt.show()
+def show_image(img, name="img"):
+    """Shows an image until any key is pressed"""
+    print(type(img))
+    print(img.shape)
+    cv2.namedWindow(name, cv2.WINDOW_AUTOSIZE)
+    processed_img = cv2.resize(img, (500, 500))  # Resize image
+    cv2.imshow(name, img)
+    cv2.waitKey(0)  # Wait for any key to be pressed (with the image window active)
+    cv2.destroyAllWindows()  # Close all windows
+    return img

@@ -1,17 +1,20 @@
 import numpy as np
 import cv2
-import matplotlib.pyplot as plt
+
+# import matplotlib.pyplot as plt
 import numpy as np
 from keras.models import model_from_json
+from .CommonFunctions import show_image
 
 # Load the saved model
-json_file = open("models/model.json", "r")
+json_file = open("sudoku/utility/models/model.json", "r")
 loaded_model_json = json_file.read()
 json_file.close()
 loaded_model = model_from_json(loaded_model_json)
 # load weights into new model
-loaded_model.load_weights("models/model.h5")
+loaded_model.load_weights("sudoku/utility/models/model.h5")
 print("Loaded saved model from disk.")
+print("loaded_module========+>", loaded_model)
 
 
 # evaluate loaded model on test data
@@ -39,7 +42,10 @@ def extract_number(sudoku):
             #            filename = "images/sudoku/file_%d_%d.jpg"%(i, j)
             #            cv2.imwrite(filename, image)
             if image.sum() > 25000:
+                show_image(image, "identify-number")
                 grid[i][j] = identify_number(image)
+                print("grid [{}][{}]: {}".format(i, j, grid[i][j]))
+
             else:
                 grid[i][j] = 0
     return grid.astype(int)
