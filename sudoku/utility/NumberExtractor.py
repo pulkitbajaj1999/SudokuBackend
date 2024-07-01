@@ -23,10 +23,9 @@ print("Loaded saved model from disk.")
 def identify_number(image):
     image_resize = cv2.resize(image, (28, 28))  # For plt.imshow
     image_resize_2 = image_resize.reshape(1, 28, 28, 1)
-    print("shape===========>".format(image_resize_2.shape))
     # For input to model.predict_classes
     #    cv2.imshow('number', image_test_1)
-    predictions = loaded_model.predict(image_resize_2)
+    predictions = loaded_model.predict(image_resize_2, verbose=0)
     predicted_classes = np.argmax(predictions, axis=1)
     # loaded_model_pred = loaded_model.predict_classes(image_resize_2, verbose=0)
     return predicted_classes[0]
@@ -48,12 +47,10 @@ def extract_number(sudoku):
                 grid[i][j] = identify_number(image)
             else:
                 grid[i][j] = 0
-
-            print("[extract_number]:sum[{}][{}]======+> {}".format(i, j, image.sum()))
-            print("[extract_number]:grid [{}][{}]: {}".format(i, j, grid[i][j]))
-            if i == 0 and grid[i][j] in (1, 8, 7, 9):
-                show_image(image, "number")
-            if (i, j) in [(5, 7)]:
-                show_image(image, "matrix[6][8]")
+            print(
+                "[extract_number]:grid[{}][{}]======+> sum: {}  value: {}".format(
+                    i + 1, j + 1, image.sum(), grid[i][j]
+                )
+            )
 
     return grid.astype(int)

@@ -28,7 +28,7 @@ def show_digits(digits, colour=255):
     for i in range(9):
         row = np.concatenate(with_border[i * 9 : ((i + 1) * 9)], axis=1)
         rows.append(row)
-    img = show_image(np.concatenate(rows))
+    img = np.concatenate(rows)
     return img
 
 
@@ -86,7 +86,7 @@ def pre_process_image(img, skip_dilate=False):
 
     # Adaptive threshold using 11 nearest neighbour pixels
     proc = cv2.adaptiveThreshold(
-        proc, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2
+        proc, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2
     )
 
     # Invert colours, so gridlines have non-zero pixel values.
@@ -327,9 +327,20 @@ def extract_digit(img, rect, size):
     # Scale and pad the digit so that it fits a square of the digit size we're using for machine learning
     w = bbox[1][0] - bbox[0][0]
     h = bbox[1][1] - bbox[0][1]
+    wr, hr = w * 9 / img.shape[0], h * 9 / img.shape[1]
+    print(
+        "[extract_digit]mat[{}][{}]: w: {}  h: {} wr {} hr {}".format(
+            np.ceil(np.interp(rect[0][1], [0, img.shape[1]], [1, 9])).astype(int),
+            np.ceil(np.interp(rect[0][0], [0, img.shape[0]], [1, 9])).astype(int),
+            w,
+            h,
+            wr,
+            hr,
+        )
+    )
 
-    # Ignore any small bounding boxes
-    if w > 0 and h > 0 and (w * h) > 100 and len(digit) > 0:
+    # Ignore any small bounding boxes having width or height ratio < 20%
+    if w > 0 and h > 0 and wr > 0.2 and hr > 0.2 and len(digit) > 0:
         return scale_and_centre(digit, size, 4)
     else:
         return np.zeros((size, size), np.uint8)
@@ -340,13 +351,14 @@ def get_digits(img, squares, size):
     digits = []
     img = pre_process_image(img.copy(), skip_dilate=True)
     #    cv2.imshow('img', img)
-    for square in squares:
+    for i, square in enumerate(squares):
+        # if i == 14:
         digits.append(extract_digit(img, square, size))
     return digits
 
 
-def parse_grid(path, debug=False):
-    original = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+def parse_grid(image, debug=False):
+    original = image.copy()
     if debug:
         show_image(original, name="original")
 
