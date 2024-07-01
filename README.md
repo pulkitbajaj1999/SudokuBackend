@@ -31,6 +31,10 @@ git clone https://github.com/aakashjhawar/SolveSudoku.git
 ```
 pip install -r requirement2.txt
 ```
+5. (optional) train the model specific to your system
+```
+python cnn_model1.py
+```
 4. run djnago server
 ```
 python manage.py runserver
@@ -40,6 +44,7 @@ python manage.py runserver
 https://github.com/pulkitbajaj1999/sudoku-frontend.git
 ```
 6. after starting both fronend and backend got to browser and open frontend
+
 
 ## Procedure
  > 1. Image preprocessing (Thresholding).
