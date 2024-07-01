@@ -92,3 +92,6 @@ db.sqlite3
 #large model not to add to git
 # https://github.com/oussafik/HandWrinting-Digit-Recognition/blob/main/mnist.h5
 mnist.h5
+
+
+.vscode
