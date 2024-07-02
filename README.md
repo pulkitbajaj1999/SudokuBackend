@@ -31,19 +31,19 @@ git clone https://github.com/aakashjhawar/SolveSudoku.git
 ```
 pip install -r requirement2.txt
 ```
-5. (optional) train the model specific to your system
+4. train the model specific to your system
 ```
 python cnn_model1.py
 ```
-4. run djnago server
+5. run djnago server
 ```
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
 ```
-5. checkout [frontend repo](https://github.com/pulkitbajaj1999/sudoku-frontend)
+6. checkout [frontend repo](https://github.com/pulkitbajaj1999/sudoku-frontend)
 ```
 https://github.com/pulkitbajaj1999/sudoku-frontend.git
 ```
-6. after starting both fronend and backend got to browser and open frontend
+7. after starting both fronend and backend got to browser and open frontend
 
 
 ## Procedure
